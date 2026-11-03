@@ -1,36 +1,3 @@
-## Fra template til teaminstans
-
-Dette template-repoet er utgangspunktet for en egen `sf-arkiv`-instans i teamets namespace.
-
-1. Velg «Use this template» → «Create a new repository» i GitHub, og gi repoet et navn, for eksempel `sf-arkiv-<team-namespace>`. Legg det nye repoet til under Repositories for teamet i Nais Console, slik at GitHub Actions får deploye til teamets namespace.
-2. Bruk IDE-ens søk og erstatt i hele prosjektet: erstatt `template` med teamets namespace. Dette oppdaterer blant annet namespace, team, ingresser, workflow og lenker. Kontroller at `team` i workflow og Nais-manifestene er teamets faktiske Nais-team hvis det er forskjellig fra namespace. Behold appnavnet og ConfigMap-navnet `sf-arkiv` og Salesforce-reglene med `teamcrm` og `dev-external`/`prod-external`.
-3. Kontroller at `ArkivTable` samsvarer med ønsket datamodell. Ved endringer må du også oppdatere DTO-en `Arkiv`, tilhørende funksjoner, tester og OpenAPI-spesifikasjonen. Kontroller også `gcp.sqlInstances` i Nais-manifestene: dev bruker minste tier (`db-f1-micro`), mens prod bruker minste tier som omfattes av Cloud SQL-SLA (`db-custom-1-3840`), med `diskAutoresize: true`.
-4. Gå til teamets namespace i Nais Console og legg til det nye repoet under Repositories for å tillate deploy. Opprett en ConfigMap med navnet `sf-arkiv` i teamets namespace i både `dev-gcp` og `prod-gcp`. Legg inn verdiene i tabellen nedenfor som strenger, uten anførselstegn i selve verdien.
-
-   Et raskt alternativ er å bruke fila `configmap` i repoets rot. Kjør fra repoets rot:
-
-   ```sh
-   kubectl apply -f configmap -n <team-namespace> --context dev-gcp
-   kubectl apply -f configmap -n <team-namespace> --context prod-gcp
-   ```
-
-| ConfigMap-nøkkel | Før første deploy (dev og prod) | Etter initialisering (dev og prod) |
-|---|---------------------------------|---|
-| `DEV_TEST_BYPASS_ALLOWED` | `false`                         | `false` |
-| `HENTE_ALLOWED` | `false`                         | `false` |
-| `DB_INIT_ALLOWED` | `true`                          | `false` |
-| `DUMMY_READ_TO_TEST_READINESS` | `false`                         | `true` |
-
-5. Deploy til dev via GitHub Actions. Workflowen deployer til dev ved push og til prod ved push til `main`. Klargjør derfor begge miljøene før første push til `main`. Nais oppretter Cloud SQL-databasen og Entra-appen fra manifestet. Nais injiserer databasetilgang og Entra-konfigurasjon, så dette skal ikke legges i ConfigMap. Første deploy kan ta tid og gi en timeout-feil mens Nais oppretter databasen.
-6. Initialiser tabellen i hvert miljø før appen tas i bruk. Se til att `DB_INIT_ALLOWED=true`, og åpne `/internal/initDb` via intern ingress. Endpointet oppretter tabellen i databasen. Sett deretter `DB_INIT_ALLOWED=false` og `DUMMY_READ_TO_TEST_READINESS=true`, og la podden starta på nytt. La sistnevnte være `false` frem til tabellen finnes, ellers feiler appen ved oppstart. Kontroller `/internal/activeConfig` og at podden blir ready. Endringer i ConfigMap som brukes som miljøvariabler trigger omstart.
-7. Konfigurer Salesforce til å bruke den nye instansens eksterne ingress og hente M2M-token med scope `api://dev-gcp.<team-namespace>.sf-arkiv/.default` i dev og `api://prod-gcp.<team-namespace>.sf-arkiv/.default` i prod. Inbound-reglene gir de oppførte Salesforce-klientene Entra-tilgang. Ved behov for testing i dev kan `HENTE_ALLOWED` og `DEV_TEST_BYPASS_ALLOWED` settes til `true` midlertidig. Bruk bare testdata, og sett dem tilbake til `false` etterpå.
-
-Interne lenker krever tilgang til Navs interne nettverk, for eksempel via naisdevice. Ikke legg hemmeligheter i ConfigMap eller i Git.
-
-Fjern denne seksjonen når teaminstansen er satt opp.
-
----
-
 # sf-arkiv-dialog [<img align="right" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="18" alt="GitHub repository" />](https://github.com/navikt/sf-arkiv-dialog)
 Lokalarkivinstans for team-dialog
 
