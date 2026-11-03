@@ -2,9 +2,9 @@ apiVersion: "nais.io/v1alpha1"
 kind: "Application"
 metadata:
   name: sf-arkiv
-  namespace: template
+  namespace: team-dialog
   labels:
-    team: template
+    team: team-dialog
   annotations:
     nginx.ingress.kubernetes.io/proxy-body-size: "256M"
 spec:
@@ -32,8 +32,8 @@ spec:
         databases:
           - name: arkiv
   ingresses:
-    - "https://sf-arkiv-template.intern.dev.nav.no"
-    - "https://sf-arkiv-template.ekstern.dev.nav.no"
+    - "https://sf-arkiv-team-dialog.intern.dev.nav.no"
+    - "https://sf-arkiv-team-dialog.ekstern.dev.nav.no"
   azure:
     application:
       enabled: true

@@ -31,16 +31,16 @@ Fjern denne seksjonen når teaminstansen er satt opp.
 
 ---
 
-# sf-arkiv-template [<img align="right" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="18" alt="GitHub repository" />](https://github.com/navikt/sf-arkiv-template)
-Lokalarkivinstans for template (testoppsett)
+# sf-arkiv-dialog [<img align="right" src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" width="18" alt="GitHub repository" />](https://github.com/navikt/sf-arkiv-dialog)
+Lokalarkivinstans for team-dialog
 
 Appen tilbyr et API for lagring og henting av dokumentasjon fra Salesforce i PostgreSQL (Cloud SQL) på NAIS GCP.
-Denne instansen er et testoppsett i templates namespace. Det skal opprettes egne varianter i tre andre namespace, eid av de respektive teamene.
+Denne instansen bruker namespace og Nais-team `team-dialog`.
 
 Se swagger for API:
 
-[![Swagger UI (dev)](https://img.shields.io/badge/DEV-Swagger_UI-2ea043)](https://sf-arkiv-template.intern.dev.nav.no/internal/swagger-ui/)
-[![Swagger UI (prod)](https://img.shields.io/badge/PROD-Swagger_UI-blue)](https://sf-arkiv-template.intern.nav.no/internal/swagger-ui/)
+[![Swagger UI (dev)](https://img.shields.io/badge/DEV-Swagger_UI-2ea043)](https://sf-arkiv-team-dialog.intern.dev.nav.no/internal/swagger-ui/)
+[![Swagger UI (prod)](https://img.shields.io/badge/PROD-Swagger_UI-blue)](https://sf-arkiv-team-dialog.intern.nav.no/internal/swagger-ui/)
 
 ## Lagring og henting
 
@@ -64,27 +64,27 @@ Responsheaderen `x-konfidentiellt-skipped` fra `/hente` angir antall utelatte tr
 |---|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `DEV_TEST_BYPASS_ALLOWED` | `"true"` tillater testkall uten token i `dev-gcp` når `kilde` er `"test"` (første oppføring i `/arkiv`, søkefeltet i `/hente`). Manglende eller annen verdi slår av bypass. Bruk for testing direkte i swagger.                                                                                                                                                                                       |
 | `HENTE_ALLOWED` | `"true"` godkjenner kall til `/hente`. `"false"`, manglende eller annen verdi gir 403, også med gyldig token eller testbypass. Påvirker ikke `/arkiv`.                                                                                                                                                                                                                                                |
-| `DB_INIT_ALLOWED` | `"true"` godkjenner kall til `/initDb`. Brukes for å opprette databasen hvis den ikke allerede finnes i clusteret. Åpne [![init (dev)](https://img.shields.io/badge/DEV-init-2ea043)](https://sf-arkiv-template.intern.dev.nav.no/internal/initDb) eller [![init (prod)](https://img.shields.io/badge/PROD-init-blue)](https://sf-arkiv-template.intern.nav.no/internal/initDb) for å opprette databasen. |
+| `DB_INIT_ALLOWED` | `"true"` godkjenner kall til `/initDb`. Brukes for å opprette databasen hvis den ikke allerede finnes i clusteret. Åpne [![init (dev)](https://img.shields.io/badge/DEV-init-2ea043)](https://sf-arkiv-team-dialog.intern.dev.nav.no/internal/initDb) eller [![init (prod)](https://img.shields.io/badge/PROD-init-blue)](https://sf-arkiv-team-dialog.intern.nav.no/internal/initDb) for å opprette databasen. |
 | `DUMMY_READ_TO_TEST_READINESS` | `"true"` gjør at appen kjører et hente-kall for data med `kilde` `"test"` før podden markeres som ready for Kubernetes. Sikrer at databasetilkoblingen er etablert.                                                                                                                                                                                                                                   |
 
 Endepunkter som viser hvilken konfigurasjon som er aktiv:
 
-[![activeConfig (dev)](https://img.shields.io/badge/DEV-activeConfig-2ea043)](https://sf-arkiv-template.intern.dev.nav.no/internal/activeConfig)
-[![activeConfig (prod)](https://img.shields.io/badge/PROD-activeConfig-blue)](https://sf-arkiv-template.intern.nav.no/internal/activeConfig)
+[![activeConfig (dev)](https://img.shields.io/badge/DEV-activeConfig-2ea043)](https://sf-arkiv-team-dialog.intern.dev.nav.no/internal/activeConfig)
+[![activeConfig (prod)](https://img.shields.io/badge/PROD-activeConfig-blue)](https://sf-arkiv-team-dialog.intern.nav.no/internal/activeConfig)
 
 ## Diagnostics
 En del statistikk kan ses her:
 
-[![dbSize (dev)](https://img.shields.io/badge/DEV-dbSize-2ea043)](https://sf-arkiv-template.intern.dev.nav.no/internal/dbSize) [![dbGrowth (dev)](https://img.shields.io/badge/DEV-dbGrowth-2ea043)](https://sf-arkiv-template.intern.dev.nav.no/internal/dbGrowth)
+[![dbSize (dev)](https://img.shields.io/badge/DEV-dbSize-2ea043)](https://sf-arkiv-team-dialog.intern.dev.nav.no/internal/dbSize) [![dbGrowth (dev)](https://img.shields.io/badge/DEV-dbGrowth-2ea043)](https://sf-arkiv-team-dialog.intern.dev.nav.no/internal/dbGrowth)
 
-[![dbSize (prod)](https://img.shields.io/badge/PROD-dbSize-blue)](https://sf-arkiv-template.intern.nav.no/internal/dbSize) [![dbGrowth (prod)](https://img.shields.io/badge/PROD-dbGrowth-blue)](https://sf-arkiv-template.intern.nav.no/internal/dbGrowth)
+[![dbSize (prod)](https://img.shields.io/badge/PROD-dbSize-blue)](https://sf-arkiv-team-dialog.intern.nav.no/internal/dbSize) [![dbGrowth (prod)](https://img.shields.io/badge/PROD-dbGrowth-blue)](https://sf-arkiv-team-dialog.intern.nav.no/internal/dbGrowth)
 
 ## Metrikker
 
 Appen eksponerer disse tellerne til Prometheus:
 
-[![Prometheus (dev)](https://img.shields.io/badge/DEV-Prometheus-2ea043?logo=prometheus&logoColor=white)](https://sf-arkiv-template.intern.dev.nav.no/internal/prometheus)
-[![Prometheus (prod)](https://img.shields.io/badge/PROD-Prometheus-blue?logo=prometheus&logoColor=white)](https://sf-arkiv-template.intern.nav.no/internal/prometheus)
+[![Prometheus (dev)](https://img.shields.io/badge/DEV-Prometheus-2ea043?logo=prometheus&logoColor=white)](https://sf-arkiv-team-dialog.intern.dev.nav.no/internal/prometheus)
+[![Prometheus (prod)](https://img.shields.io/badge/PROD-Prometheus-blue?logo=prometheus&logoColor=white)](https://sf-arkiv-team-dialog.intern.nav.no/internal/prometheus)
 
 | Metrikk | Betydning |
 |---|---|
